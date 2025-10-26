@@ -1,0 +1,239 @@
+<MainProfil>
+    LimitedScrollView:
+        limit_scroll:True
+        MDBoxLayout:
+            orientation:'vertical'
+            adaptive_height:True
+            spacing:dp(10)
+            padding:dp(10)
+            MDBoxLayout:
+                orientation:'vertical'
+                spacing:dp(10)
+                adaptive_height:True
+                Image:
+                    source:"img/profile_img.png"
+                    keep_ratio:True
+                    size_hint:None,None
+                    size:94,94
+                    pos_hint:{"center_x":.5}
+                MDLabel:
+                    text:root.nom
+                    font_size:sp(28)
+                    bold:True
+                    padding:[dp(10),0]
+                    halign:"center"
+                    adaptive_height:True
+
+            MDBoxLayout:
+                padding:[0,dp(10)]
+                spacing:dp(10)
+                adaptive_height:True
+                MDRoundFlatIconButton:
+                    text:"Historique De Commande"
+                    icon:"history"
+                    size_hint_y:1
+                    line_color:0,0,0,0
+                    md_bg_color:app.COLORS["light"]
+                    theme_icon_color:"Custom"
+                    theme_text_color:"Custom"
+                    icon_color:app.COLORS["dark"]
+                    text_color:app.COLORS["dark"]
+                    on_release:
+                        app.screen.screen_manager.transition.direction="left"
+                        app.screen.screen_manager.current="history-profil"
+                MDIconButton:
+                    icon:"pencil"
+                    md_bg_color:app.COLORS["light"]
+                    theme_icon_color:"Custom"
+                    icon_color:app.COLORS["dark"]
+                    on_release:
+                        app.screen.screen_manager.direction="left"
+                        app.screen.screen_manager.current="edit-profil"
+
+            MDBoxLayout:
+                orientation:'vertical'
+                adaptive_height:True
+                spacing:dp(10)
+                padding:[0,dp(10)]
+                MDBoxLayout:
+                    padding:[0,10]
+                    spacing:dp(10)
+                    adaptive_height:True
+                    MDLabel:
+                        text:"numéro om"
+                        font_size:sp(16)
+                        adaptive_width:True
+                    MDBoxLayout:
+                        orientation:'vertical'
+                        adaptive_height:True
+                        MDLabel:
+                            padding:[dp(10),0]
+                            text:root.om
+                            adaptive_size:True
+                        MDSeparator:
+                            color:app.COLORS["light"]
+                            height:dp(1)
+                MDBoxLayout:
+                    padding:[0,5]
+                    adaptive_height:True
+                    spacing:dp(10)
+                    font_size:sp(16)
+
+                    MDLabel:
+                        text:"numéro momo"
+                        adaptive_width:True
+                        adaptive_height:True
+                    MDBoxLayout:
+                        orientation:'vertical'
+                        adaptive_height:True
+                        MDLabel:
+                            padding:[dp(10),0]
+                            text:root.momo
+                            adaptive_size:True
+                        MDSeparator:
+                            color:app.COLORS["light"]
+                            height:dp(1)
+
+            MDLabel:
+                text:"Lieu prédéfini"
+                bold:True
+                font_size:sp(16)
+                adaptive_height:True
+            MDRoundFlatIconButton:
+                text:"Ajouter un lieu"
+                icon:"plus"
+                line_color:0,0,0,0
+                md_bg_color:app.COLORS["light"]
+                theme_icon_color:"Custom"
+                theme_text_color:"Custom"
+                icon_color:app.COLORS["dark"]
+                text_color:app.COLORS["dark"]
+            MDGridLayout:
+                id:place_grid
+                cols:2
+                adaptive_height:True
+
+
+<EditProfil>:
+    AnchorLayout:
+        anchor_y:"top"
+        MDBoxLayout:
+            orientation:'vertical'
+            adaptive_height:True
+            spacing:dp(10)
+            padding:dp(10)
+
+            MDBoxLayout:
+                padding:[0,0,0,dp(10)]
+                adaptive_height:True
+                spacing:dp(10)
+
+                MDIconButton:
+                    icon:"arrow-left"
+                    md_bg_color:app.COLORS["light"]
+                    theme_icon_color:"Custom"
+                    icon_color:app.COLORS["dark"]
+                    on_release:
+                        app.screen.screen_manager.transition.direction="right"
+                        app.screen.go_to("main_profile")
+                MDLabel:
+                    text:"Modifier Le Profil"
+                    font_size:dp(18)
+                    adaptive_height:True
+                    halign:"center"
+                    pos_hint:{"center_y":.5}
+                    bold:True
+
+
+
+            MDLabel:
+                text:"Information Personnelle"
+                bold:True
+                font_size:sp(16)
+                color:app.COLORS["dark"]
+                adaptive_height:True
+            MDTextField:
+                id:nom
+                hint_text:"nom d'utilisateur"
+                text:root.nom
+            MDTextField:
+                id:tel
+                hint_text:"numéro à contacter"
+                text:root.numero
+            MDSeparator:
+                color:app.COLORS["light"]
+                height:dp(1)
+
+            MDLabel:
+                text:"Information Paiement"
+                bold:True
+                color:app.COLORS["dark"]
+                font_size:sp(16)
+                adaptive_height:True
+            MDTextField:
+                id:om
+                hint_text:"numéro orange money"
+                text:root.om
+            MDTextField:
+                id:momo
+                hint_text:"numéro mobile money"
+                text:root.momo
+
+    MDAnchorLayout:
+        anchor_y:"bottom"
+        padding:dp(10)
+        MDRectangleFlatButton:
+            text:"valider"
+            line_color:0,0,0,0
+            md_bg_color:app.COLORS["primary"]
+            theme_text_color:"Custom"
+            text_color:app.COLORS["bg"]
+            on_press:root.update(nom.text,tel.text,om.text,momo.text)
+
+<HistoryProfil>:
+    AnchorLayout:
+        anchor_y:"top"
+        MDBoxLayout:
+            orientation:'vertical'
+            adaptive_height:True
+            spacing:dp(10)
+            padding:dp(10)
+
+            MDBoxLayout:
+                padding:[0,0,0,dp(10)]
+                adaptive_height:True
+                spacing:dp(10)
+
+                MDIconButton:
+                    icon:"arrow-left"
+                    md_bg_color:app.COLORS["light"]
+                    theme_icon_color:"Custom"
+                    icon_color:app.COLORS["dark"]
+                    on_release:
+                        app.screen.screen_manager.transition.direction="right"
+                        app.screen.go_to("main_profile")
+                MDLabel:
+                    text:"Historique de commande"
+                    font_size:dp(18)
+                    adaptive_height:True
+                    halign:"center"
+                    pos_hint:{"center_y":.5}
+                    bold:True
+            SwitchCommandeBtn:
+            MDBoxLayout:
+                size_hint:2,1
+                md_bg_color:"green"
+
+                LimitedRV:
+                    id: rv_restau
+                    viewclass: "RestauListItem"
+                    size_hint_x:.5
+                    x:0
+                    RecycleBoxLayout:
+                        md_bg_color:"pink"
+                        orientation: "vertical"
+                        default_size: None, dp(100)
+                        default_size_hint: 1, None
+                        size_hint_y: None
+                        spacing: dp(10)
+                        height: self.minimum_height

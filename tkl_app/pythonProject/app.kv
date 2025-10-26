@@ -1,0 +1,78 @@
+#import Home,SearchPage acceuil
+#import MainProfil profile
+#import MainCommand command
+
+<HomeBottomNav>:
+    MDAnchorLayout:
+        anchor_y:"top"
+        ScreenManager:
+            id:sm
+            Home:
+                name:"home"
+
+            SearchPage:
+                name:"search"
+            MainCommand:
+                name:"commandes"
+            MainProfil:
+                name:"profile"
+    MDAnchorLayout:
+        anchor_y:"bottom"
+        Image:
+            source:"img/linear_bg.png"
+            fit_mode:"fill"
+            size_hint_x:None
+            size_hint_y:None
+            size:box.size
+
+
+        MDBoxLayout:
+            id:box
+            padding:dp(10)
+            adaptive_height:True
+            MDIconButton:
+                icon:"home"
+                md_bg_color:app.COLORS["primary"]
+                theme_icon_color:"Custom"
+                icon_color:app.COLORS["bg"]
+
+                on_press:
+                    root.deselect_all(self,"home")
+            Widget:
+            MDRoundFlatIconButton:
+                icon:"magnify"
+                text:"rechercher"
+                size_hint_y:1
+                md_bg_color:app.COLORS["light"]
+                theme_icon_color:"Custom"
+                icon_color:app.COLORS["normal"]
+                theme_text_color:"Custom"
+                line_color:0,0,0,0
+                text_color:app.COLORS["normal"]
+                on_press:
+                    root.deselect_all(self,"search")
+            Widget:
+            MDIconButton:
+                icon:"store"
+                md_bg_color:app.COLORS["light"]
+                theme_icon_color:"Custom"
+                icon_color:app.COLORS["normal"]
+                on_press:
+                    root.deselect_all(self,"commandes")
+            Widget:
+            MDIconButton:
+                icon:"account"
+                md_bg_color:app.COLORS["light"]
+                theme_icon_color:"Custom"
+                icon_color:app.COLORS["normal"]
+                on_press:
+                    root.deselect_all(self,"profile")
+
+<Splash>:
+    MDFloatLayout:
+        AnchorLayout:
+            anchor_y:"center"
+            anchor_x:"center"
+            Image:
+                source:'img/app_icon.png'
+

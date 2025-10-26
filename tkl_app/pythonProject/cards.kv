@@ -1,0 +1,551 @@
+#:import dp kivy.metrics.dp
+#:import sp kivy.metrics.sp
+#:import img_url api
+
+<SeeMoreBtn>:
+    md_bg_color:0,0,0,0
+    orientation:"vertical"
+    height:dp(100)
+    radius:[0]
+    padding:0
+    size_hint:None,None
+    adaptive_width:True
+
+    MDIconButton:
+        icon:"arrow-right"
+        md_bg_color:app.COLORS["light"]
+        pos_hint:{"center_x":.5}
+        theme_icon_color:"Custom"
+        icon_color:app.COLORS["dark"]
+
+    MDLabel:
+        text:root.body
+        font_size:sp(16)
+        pos_hint:{"center_x":.5}
+        halign:"center"
+        adaptive_size:True
+        color:app.COLORS["dark"]
+    MDLabel:
+        text:"Tout afficher"
+        halign:"center"
+        font_size:sp(14)
+        pos_hint:{"center_x":.5}
+        adaptive_size:True
+        color:app.COLORS["normal"]
+
+<ShopNearCard>:
+    md_bg_color:0,0,0,0
+    orientation:"vertical"
+    height:dp(100)
+    radius:[0]
+    padding:0
+    size_hint:None,None
+    adaptive_width:True
+    on_release:
+        next=app.screen.screen_manager.get_screen("restaurant")
+        next.data=root.data
+        next.preview=app.screen.get_current()
+        app.screen.screen_manager.direction="left"
+        app.screen.go_to("restaurant")
+    FloatLayout:
+        height:dp(66)
+        canvas.before:
+            Color:
+                rgba:[217/255,217/255,217/255,1]
+            RoundedRectangle:
+                size:dp(66),dp(66)
+                pos:self.center_x-(dp(66))/2,self.center_y-(dp(66))/2
+                radius:[dp(200)]
+        FitImage:
+            radius: [dp(150)]
+            source: root.logo
+            size_hint:None,None
+            size:dp(64),dp(64)
+            pos_hint:{"center_x":.5,"center_y":.5}
+
+    MDLabel:
+        text:root.data["user"]["username"] if root.data.get("user") else "Carrefour"
+        font_size:sp(16)
+        pos_hint:{"center_x":.5}
+        halign:"center"
+        adaptive_size:True
+        color:app.COLORS["dark"]
+    MDLabel:
+        text:root.heure
+        halign:"center"
+        font_size:sp(14)
+        pos_hint:{"center_x":.5}
+        adaptive_size:True
+        color:app.COLORS["normal"]
+
+<ShopRangCard>:
+    md_bg_color:0,0,0,0
+    orientation:"vertical"
+    pos_hint:{"top":1}
+    width:dp(125)
+    radius:[dp(0)]
+    padding:dp(0)
+    spacing:dp(5)
+    size_hint:None,1
+    adaptive_height:True
+    ShopRang:
+        rang:root.rang
+        logo:root.logo
+
+    MDLabel:
+        text:root.nom
+        bold:True
+        font_size:sp(16)
+        halign:"left"
+        color:app.COLORS["dark"]
+        adaptive_height:True
+    MDLabel:
+        text:root.quartier
+        font_size:sp(14)
+        halign:"left"
+        adaptive_height:True
+        color:app.COLORS["dark"]
+    MDBoxLayout:
+        spacing:0
+        padding:0
+        adaptive_height:True
+
+        MDLabel:
+            text:root.rate
+            font_size:sp(14)
+            halign:"left"
+            adaptive_size:True
+            pos_hint:{"center_y":.5}
+            color:app.COLORS["normal"]
+
+        MDIcon:
+            icon:"star"
+            adaptive_size:True
+            valign:"center"
+            font_size:sp(14)
+            size_hint:None,None
+            pos_hint:{"center_y":.5}
+            color:app.COLORS["normal"]
+
+
+<ShopRang@MDFloatLayout>:
+    rang:""
+    logo:""
+    width:dp(130)
+    adaptive_size:True
+    canvas.before:
+        Color:
+            rgba:[217/255,217/255,217/255,1]
+        RoundedRectangle:
+            size:dp(121),dp(86)
+            pos:self.center_x-(dp(121))/2,self.center_y-(dp(86))/2
+            radius:[dp(10)]
+    FitImage:
+        id:logo
+        radius: [dp(10)]
+        source: root.logo
+        size_hint:None,None
+        size:dp(120),dp(85)
+        pos_hint:{"center_x":.5,"center_y":.5}
+
+    Image:
+        source: root.rang
+        size_hint_y:.5
+        size_hint_x:None
+        adaptive_width:True
+        fit_mode:"contain"
+        center_x:logo.x
+        pos_hint:{"y":0}
+
+<FoodCard>:
+    orientation:"horizontal"
+    size_hint_y: None
+    height:dp(160)
+    type:"outlined"
+    line_color:"#D9D9D9"
+    size_hint:1,None
+    adaptive_width:True
+    spacing:dp(22)
+    padding:dp(15)
+    padding_y:0
+    radius:[dp(10)]
+    valign:"top"
+    md_bg_color:0,0,0,0
+    on_release:
+        app.screen.open_sheet(root.data)
+
+    MDBoxLayout:
+        orientation:"vertical"
+        adaptive_size:True
+        max_height:dp(160)
+        pos_hint:{"center_y":.5}
+        spacing:dp(2)
+
+        MDLabel:
+            text:root.data["plat"]["plat"]["nom"] if root.data.get("plat") else "rien"
+            font_size:sp(18)
+            pos_hint:{"x":0}
+            adaptive_size:True
+            color:app.COLORS["dark"]
+        MDLabel:
+            text:(root.data["restaurant"]+"\n"+root.data["quartier"]) if root.data.get("restaurant") else "rien"
+            font_size:sp(14)
+            color:app.COLORS["normal"]
+            pos_hint:{"x":0}
+            adaptive_size:True
+
+        MDLabel:
+            text:(str(root.data["prix"])+" fcfa") if root.data.get("prix") else "rien"
+            font_size:sp(14)
+            color:app.COLORS["primary"] if root.in_menu is True else app.COLORS["light"]
+            pos_hint:{"x":0}
+            adaptive_size:True
+    Widget:
+    FitImage:
+        size:dp(140),dp(160)
+        size_hint:None,None
+        source:(root.image+root.data["plat"]["image"]) if root.data.get("plat") else "img/ndolé.jpg"
+        pos_hint:{"center_x":.5,"center_y":.5}
+        canvas.after:
+            Color:
+                rgba:(0,0,0,0) if root.in_menu is True else (0,0,0,0.5)
+            Rectangle:
+                pos:self.pos
+                size:self.size
+
+<ProductCard>:
+    orientation:"vertical"
+    width:dp(100)
+    adaptive_height:True
+    md_bg_color:0,0,0,0
+    spacing:dp(5)
+    pos_hint:{"top":1}
+    padding:0
+    size_hint:None,None
+    radius:[0]
+
+    MDFloatLayout:
+        md_bg_color:"red"
+        size:dp(100),dp(100)
+        adaptive_height:True
+        FitImage:
+            id:img
+            size_hint:None,None
+            size:dp(100),dp(100)
+            source:root.data["image"]
+            pos_hint:{"center_x":.5,"center_y":.5}
+        MDIconButton:
+            md_bg_color:app.COLORS["light"]
+            icon_color:app.COLORS["normal"]
+            icon:"plus"
+            pos_hint:{"right":1}
+            y:img.y
+    MDLabel:
+        text:root.data["prix"]
+        font_size:sp(14)
+        color:app.COLORS["primary"]
+        pos_hint:{"center_y":.5}
+        width:dp(100)
+        adaptive_height:True
+    MDLabel:
+        text:root.data["nom"]
+        font_size:sp(16)
+        pos_hint:{"x":0}
+        width:dp(100)
+        adaptive_height:True
+        color:app.COLORS["dark"]
+    MDLabel:
+        text:root.data["boutique"]+"\n"+root.data["quartier"]
+        font_size:sp(14)
+        color:app.COLORS["normal"]
+        pos_hint:{"x":0}
+        width:dp(100)
+        adaptive_height:True
+
+<BasketCard>:
+    orientation:"horizontal"
+    size_hint_y: None
+    height:dp(100)
+    size_hint:1,None
+    spacing:dp(16)
+    padding:dp(0)
+    padding_y:0
+    radius:[dp(0)]
+    md_bg_color:0,0,0,0
+    FitImage:
+        size_hint:None,None
+        size:dp(100),dp(100)
+        source:root.data["image"]
+        pos_hint:{"center_x":.5,"center_y":.5}
+    MDBoxLayout:
+        orientation:"vertical"
+        size_hint_x:.5
+        pos_hint:{"center_y":.5}
+        adaptive_height:True
+        MDLabel:
+            text:root.data["nom"]
+            font_size:sp(16)
+            size_hint_x:1
+            pos_hint:{"x":0}
+            adaptive_height:True
+            color:app.COLORS["dark"]
+        MDLabel:
+            id:priceLab
+            text:str(root.data["prix"])+"fcfa"
+            font_size:sp(14)
+            size_hint_x:1
+            color:app.COLORS["primary"]
+            pos_hint:{"center_y":.5}
+            adaptive_height:True
+    MDCard:
+        adaptive_size:True
+        spacing:dp(5)
+        radius:[30]
+        pos_hint:{"center_y":.5}
+        md_bg_color:app.COLORS["light"]
+        MDIconButton:
+            icon:"trash-can"
+            theme_icon_color:"Custom"
+            icon_color:app.COLORS["normal"]
+
+        MDLabel:
+            id:quantityLab
+            text:str(root.quantity)
+            color:app.COLORS["dark"]
+            pos_hint:{"center_y":.5}
+            adaptive_size:True
+        MDIconButton:
+            icon:"plus"
+            theme_icon_color:"Custom"
+            icon_color:app.COLORS["normal"]
+            on_release:
+                root.add_quantity()
+                priceLab.text=root.montant
+                quantityLab.text=str(root.quantity)
+
+
+<RestauListItem>:
+    orientation:"vertical"
+    size_hint_y: None
+    height:dp(100)
+    spacing:dp(16)
+    padding:dp(10)
+    padding_y:0
+    radius:[dp(0)]
+    md_bg_color:0,0,0,0
+    type:"filled"
+    MDRelativeLayout:
+        MDBoxLayout:
+            orientation:"horizontal"
+            adaptive_size:True
+            size_hint:1,None
+            spacing:dp(16)
+            padding:dp(0)
+            md_bg_color:0,0,0,0
+            FitImage:
+                size_hint:None,None
+                size:dp(50),dp(50)
+                radius:[dp(25)]
+                source:"img/fpka.jpg"
+                pos_hint:{"center_x":.5,"center_y":.5}
+            MDBoxLayout:
+                orientation:"vertical"
+                size_hint_x:.5
+                pos_hint:{"center_y":.5}
+                adaptive_height:True
+                MDLabel:
+                    text:(root.data["user"]["username"]+" - "+root.data["user"]["quartier"]) if root.data.get("user") else "rien"
+                    font_size:sp(16)
+                    size_hint_x:1
+                    pos_hint:{"x":0}
+                    adaptive_height:True
+                    color:app.COLORS["dark"]
+                MDLabel:
+                    id:priceLab
+                    text:("type: "+root.data["type_plat"])if root.data.get("type_plat") else "rien"
+                    font_size:sp(14)
+                    size_hint_x:1
+                    color:app.COLORS["dark"]
+                    pos_hint:{"center_y":.5}
+                    adaptive_height:True
+                MDLabel:
+                    id:priceLab
+                    text:("frais de livraison: "+root.livraison+" fcfa")
+                    font_size:sp(14)
+                    size_hint_x:1
+                    color:app.COLORS["normal"]
+                    pos_hint:{"center_y":.5}
+                    adaptive_height:True
+            MDBoxLayout:
+                adaptive_width:True
+                MDIcon:
+                    icon:"star"
+                    font_size:sp(16)
+                    adaptive_size:True
+                    pos_hint:{"center_x":.5,"center_y":.5}
+                MDLabel:
+                    text:str(root.data["rate"]) if root.data.get("user") else "rien"
+                    adaptive_size:True
+                    pos_hint:{"center_x":.5,"center_y":.5}
+
+                    font_size:sp(16)
+    MDSeparator:
+        color:app.COLORS["light"]
+        height:dp(1)
+<SwitchCommandeBtn>:
+    id:card
+    height:dp(40)
+    adaptive_height:True
+    radius:[self.height/2]
+    md_bg_color:app.COLORS["light"]
+    spacing:0
+    MDRelativeLayout:
+        id:relative
+        height:dp(40)
+        MDCard:
+            id:switch_bar
+            radius:card.radius
+            height:card.height
+            size_hint:None,None
+            width:self.parent.width/2
+            md_bg_color:app.COLORS["primary"]
+            x:0
+
+
+        MDRectangleFlatIconButton:
+            id:produits
+            icon:"package-variant"
+            text:"produits"
+            pos_hint:{"x":0}
+            _no_ripple_effect:True
+            ripple_color:0,0,0,0
+            size_hint_x:.5
+            line_color:0,0,0,0
+            md_bg_color:0,0,0,0
+            theme_icon_color:"Custom"
+            theme_text_color:"Custom"
+            icon_color:app.COLORS["bg"]
+            text_color:app.COLORS["bg"]
+            on_press:root.switch(current=self,old=plats,screen=root.shop,direction="left")
+        MDRectangleFlatIconButton:
+            id:plats
+            icon:"food"
+            _no_ripple_effect:True
+            text:"plats"
+            pos_hint:{"right":1}
+            ripple_behavior:False
+            size_hint_x:.5
+            line_color:0,0,0,0
+            md_bg_color:0,0,0,0
+            theme_icon_color:"Custom"
+            theme_text_color:"Custom"
+            icon_color:app.COLORS["dark"]
+            text_color:app.COLORS["dark"]
+            on_press:root.switch(current=self,old=produits,screen=root.restau,direction="right")
+
+<BasketTitleCard>:
+    orientation:"vertical"
+    adaptive_height:True
+    size_hint:1,None
+    height:dp(100)
+    spacing:dp(5)
+    padding:[0,dp(10)]
+    radius:[dp(0)]
+    md_bg_color:0,0,0,0
+    MDLabel:
+        text:root.restau
+        bold:True
+        adaptive_height:True
+    MDLabel:
+        text:"frais de livraison: "+str(root.livraison)+ "fcfa"
+        font_size:sp(14)
+        adaptive_height:True
+    MDSeparator:
+        color:app.COLORS["light"]
+        height:dp(1)
+
+<FoodDetail>:
+    id: bottom_sheet
+    elevation: 2
+    shadow_softness: 6
+    bg_color: "white"
+    type: "standard"
+    max_opening_height: self.height
+    default_opening_height: self.max_opening_height
+    adaptive_height: True
+
+    MDBottomSheetDragHandle:
+        drag_handle_color: "grey"
+
+        MDBottomSheetDragHandleButton:
+            icon: "close"
+            _no_ripple_effect: True
+            on_release: bottom_sheet.dismiss()
+
+    MDBottomSheetContent:
+        MDBoxLayout:
+            orientation:"vertical"
+            padding:dp(10)
+            spacing:dp(10)
+            adaptive_height:True
+            MDLabel:
+                text:root.data["plat"]["plat"]["nom"] if root.data.get("plat") else "Ndolé"
+                bold:True
+                adaptive_height:True
+                halign:"center"
+            MDLabel:
+                text:(root.data["restaurant"]+"\n"+root.data["quartier"]) if root.data.get("restaurant") else "fpka-restaurant Logbessu"
+                adaptive_height:True
+                halign:"center"
+
+            Image:
+                source:(root.image+root.data["plat"]["image"]) if root.data.get("plat") else "img/ndolé.jpg"
+                size_hint:None,None
+                width:dp(200) if self.parent.width>dp(200) else self.parent.width/1.5
+                height:self.width
+                pos_hint:{"center_x":0.5,"center_y":.5}
+            MDLabel:
+                font_size:sp(14)
+                text:"[b]Description:[/b]un plat de ndolé chargé d’écrevisse, viande de bœuf avec pour accompagnement les bâtons de maniocs"
+                adaptive_height:True
+                markup:True
+                halign:"justify"
+            MDLabel:
+                id:priceLab
+                font_size:sp(16)
+                text:"[color=#A90404][b]Prix total: [/b][/color]"+ str(root.data["prix"])+" fcfa"
+                adaptive_height:True
+                markup:True
+                halign:"left"
+            MDBoxLayout:
+                adaptive_height:True
+                MDIconButton:
+                    icon:"minus"
+                    on_release:
+                        root.reduice_quantity()
+                        priceLab.text="[color=#A90404]Prix total: [/color]"+ str(root.montant)+" fcfa"
+                        quantityLab.text=str(root.quantity)
+
+                Widget:
+                MDLabel:
+                    id:quantityLab
+                    text:str(root.quantity)
+                    adaptive_size:True
+                    pos_hint:{"center_x":0.5,"center_y":.5}
+
+                Widget:
+                MDIconButton:
+                    icon:"plus"
+                    on_release:
+                        root.add_quantity()
+                        priceLab.text="[color=#A90404]Prix total: [/color]"+ str(root.montant)+" fcfa"
+                        quantityLab.text=str(root.quantity)
+            MDFlatButton:
+                text:'Ajouter au panier'
+                radius:[15]
+                padding:15
+                theme_text_color:"Custom"
+                md_bg_color:app.COLORS["primary"]
+                text_color:app.COLORS["bg"]
+                pos_hint:{"center_x":.5}
+                elevation:5

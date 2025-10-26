@@ -1,0 +1,599 @@
+#:import FadeTransition kivy.uix.screenmanager.FadeTransition
+#:import WipeTransition kivy.uix.screenmanager.WipeTransition
+
+<RvCard>:
+    key_viewclass: 'viewclass'
+    RecycleBoxLayout:
+        default_size: None, dp(100)
+        default_size_hint: 1, None
+        size_hint_y: None
+        spacing:0
+        height: self.minimum_height
+        orientation: 'vertical'
+
+<MainHome>:
+    LimitedScrollView:
+        limit_scroll:True
+
+        MDBoxLayout:
+            orientation: "vertical"
+            valign: "top"
+            spacing: dp(10)
+            adaptive_height: True
+            padding: dp(0)
+            pos_hint:{'top':1}
+            MDBoxLayout:
+                id:box
+                orientation:"vertical"
+                spacing:dp(5)
+                valign:"top"
+                pos_hint:{"center_x":0.5,"top":1}
+                adaptive_height:True
+                padding:dp(10)
+                MDRectangleFlatIconButton:
+                    icon:"map-marker-outline"
+                    text:root.location
+                    md_bg_color:(0,0,0,0)
+                    adaptive_height:True
+                    adaptive_width:True
+                    padding:-5
+                    spacing:0
+                    line_color:(0,0,0,0)
+                    text_color:"#414041"
+                    icon_color:"#414041"
+
+                MDLabel:
+                    text:root.username
+                    adaptive_height:True
+                    bold:True
+                    padding:0
+                    font_size:20
+                MDLabel:
+                    text:"que voulez vous achetez aujourd’hui ?"
+                    adaptive_height:True
+                    font_size:14
+                    padding:0
+            LimitedScrollView:
+                limit_scroll:True
+                size_hint_y: None
+                height: dp(40)
+                bar_width: 0   # cache la barre de scroll
+                do_scroll_y: False
+                MDBoxLayout:
+                    id: tab_box
+                    orientation: "horizontal"
+                    adaptive_width: True
+                    height: dp(40)
+                    spacing: dp(10)
+                    padding: dp(10)
+
+                    Tab:
+                        text: "Tous"
+                        icon:"home-outline"
+                        select:True
+                    Tab:
+                        text: "Boutique"
+                        icon:"cart-outline"
+                        select:False
+                        on_press:
+                            root.manager.transition=WipeTransition(duration=0.4, clearcolor=(1, 1, 1, 1))
+                            root.manager.current="boutique-home"
+                    Tab:
+                        text: "Restaurant"
+                        icon:"silverware-variant"
+                        select:False
+                        on_press:
+                            root.manager.transition=WipeTransition(duration=0.4, clearcolor=(1, 1, 1, 1))
+                            root.manager.current="restaurant-home"
+
+
+            MDLabel:
+                text:"Commerces à proximité"
+                bold: True
+                padding:[10,0]
+                adaptive_height:True
+
+            LimitedScrollView:
+                limit_scroll:True
+                size_hint_y: None
+                bar_width: 0   # cache la barre de scroll
+                do_scroll_y: False
+                height: dp(110)
+                MDBoxLayout:
+                    id: rv_near_shop
+                    orientation: "horizontal"
+                    adaptive_width: True
+                    height: dp(100)
+                    spacing: dp(10)
+                    padding: [dp(10),dp(5)]
+            MDSeparator:
+                color:app.COLORS["light"]
+                height:dp(1)
+
+            # --- Meilleurs restaurants ---
+            MDLabel:
+                text:"Menu du jour"
+                bold: True
+                padding:[10,0]
+                adaptive_height:True
+            LimitedScrollView:
+                limit_scroll:True
+                size_hint_y: None
+                bar_width: 0   # cache la barre de scroll
+                do_scroll_y: False
+                height: dp(170)
+                MDBoxLayout:
+                    id: rv_menu
+                    orientation: "horizontal"
+                    adaptive_width: True
+                    height: dp(160)
+                    spacing: dp(10)
+                    padding: [dp(10),dp(5)]
+
+            MDSeparator:
+                color:app.COLORS["light"]
+                height:dp(1)
+
+            # --- Produits pas chers ---
+            MDLabel:
+                text:"Produits"
+                bold: True
+                padding:[10,0]
+                adaptive_height:True
+
+            LimitedScrollView:
+                limit_scroll:True
+                size_hint_y: None
+                bar_width: 0   # cache la barre de scroll
+                height:dp(250)
+                MDBoxLayout:
+                    id: rv_product
+                    orientation: "horizontal"
+                    adaptive_size: True
+                    spacing: dp(10)
+                    padding: [dp(10),dp(5)]
+
+
+            MDSeparator:
+                color:app.COLORS["light"]
+                height:dp(1)
+
+<Tab>:
+    type: "outlined"
+    line_color: app.COLORS["light"]
+    md_bg_color: 0,0,0,0
+    size_hint: None, None    # Obligatoire pour adaptive_size
+    height:dp(30)
+    adaptive_width: True
+    padding: dp(10)
+    spacing:dp(5)
+    MDIcon:
+        icon:root.icon
+        size_hint: None, None
+        pos_hint:{"center_x":.5,"center_y":.5}
+        adaptive_size: True
+        color: app.COLORS["dark"]
+        font_size: sp(16)
+    MDLabel:
+        id:lab
+        text: root.text
+        size_hint: None, None
+        pos_hint:{"center_x":.5,"center_y":.5}
+        adaptive_size: True
+        color: app.COLORS["dark"]
+        font_size: sp(16)
+
+<RestaurantHome>:
+    id:screen_restau
+    LimitedScrollView:
+        limit_scroll:True
+        size_hint: 1,1
+        MDBoxLayout:
+            orientation: "vertical"
+            valign: "top"
+            spacing: dp(10)
+            padding: dp(0)
+            adaptive_height:True
+            pos_hint:{'top':1}
+            MDBoxLayout:
+                id:box
+                orientation:"vertical"
+                spacing:dp(5)
+                valign:"top"
+                pos_hint:{"center_x":0.5,"top":1}
+                adaptive_height:True
+                padding:dp(10)
+                MDRectangleFlatIconButton:
+                    icon:"map-marker-outline"
+                    text:root.location
+                    md_bg_color:(0,0,0,0)
+                    adaptive_height:True
+                    adaptive_width:True
+                    padding:-5
+                    spacing:0
+                    line_color:(0,0,0,0)
+                    text_color:"#414041"
+                    icon_color:"#414041"
+
+                MDLabel:
+                    text:"Bonjour "+root.nom
+                    adaptive_height:True
+                    bold:True
+                    padding:0
+                    font_size:20
+                MDLabel:
+                    text:"que voulez vous achetez aujourd’hui ?"
+                    adaptive_height:True
+                    font_size:14
+                    padding:0
+            LimitedScrollView:
+                limit_scroll:True
+                size_hint_y: None
+                height: dp(40)
+                bar_width: 0   # cache la barre de scroll
+                do_scroll_y: False
+                MDBoxLayout:
+                    id: tab_box
+                    orientation: "horizontal"
+                    adaptive_width: True
+                    height: dp(40)
+                    spacing: dp(10)
+                    padding: dp(10)
+
+                    Tab:
+                        text: "Tous"
+                        icon:"home-outline"
+                        select:False
+                        on_press:
+                            root.manager.transition=WipeTransition(duration=0.4, clearcolor=(1, 1, 1, 1))
+                            root.manager.current="main-home"
+                    Tab:
+                        text: "Boutique"
+                        icon:"cart-outline"
+                        select:False
+                        on_press:
+                            root.manager.transition=WipeTransition(duration=0.4, clearcolor=(1, 1, 1, 1))
+                            root.manager.current="boutique-home"
+                    Tab:
+                        text: "Restaurant"
+                        icon:"silverware-variant"
+                        select:True
+
+
+            MDLabel:
+                text:"Restaurant à proximité"
+                bold: True
+                padding:[10,0]
+                adaptive_height:True
+
+            LimitedScrollView:
+                limit_scroll:True
+                size_hint_y: None
+                bar_width: 0   # cache la barre de scroll
+                do_scroll_y: False
+                height: dp(110)
+                MDBoxLayout:
+                    id: rv_near
+                    orientation: "horizontal"
+                    adaptive_width: True
+                    height: dp(100)
+                    spacing: dp(10)
+                    padding: [dp(10),dp(5)]
+            MDSeparator:
+                color:app.COLORS["light"]
+                height:dp(1)
+
+            # --- Meilleurs restaurants ---
+            MDLabel:
+                text:"Tous les restaurant"
+                bold: True
+                padding:[10,0]
+                adaptive_height:True
+            LimitedScrollView:
+                limit_scroll:True
+                size_hint_y: None
+                height: dp(40)
+                bar_width: 0   # cache la barre de scroll
+                do_scroll_y: False
+                MDBoxLayout:
+                    id: tab_box
+                    orientation: "horizontal"
+                    adaptive_width: True
+                    height: dp(40)
+                    spacing: dp(10)
+                    padding: dp(10)
+
+                    TabRestau:
+                        text: "Tous"
+                        select:True
+                        main_parent:screen_restau
+            MDBoxLayout:
+                id:rv_restau_box
+                size_hint_y:None
+                height:dp(screen_restau.height/1.8)
+
+                LimitedRV:
+                    id: rv_restau
+                    data:[]
+                    viewclass: "RestauListItem"
+                    RecycleBoxLayout:
+                        orientation: "vertical"
+                        default_size: None, dp(100)
+                        default_size_hint: 1, None
+                        size_hint_y: None
+                        spacing: dp(10)
+                        height: self.minimum_height
+
+
+
+<TabRestau>:
+    type: "outlined"
+    line_color: app.COLORS["primary"]
+    md_bg_color: 0,0,0,0
+    size_hint: None, None    # Obligatoire pour adaptive_size
+    height:dp(30)
+    adaptive_width: True
+    padding: dp(10)
+    spacing:dp(5)
+    on_press:
+        root.select=not root.select
+        root.select_card()
+
+
+    MDLabel:
+        id:lab
+        text: root.text
+        size_hint: None, None
+        pos_hint:{"center_x":.5,"center_y":.5}
+        adaptive_size: True
+        color: app.COLORS["dark"]
+        font_size: sp(16)
+
+
+<BoutiqueHome>:
+    id:screenBoutique
+    MDScrollView:
+
+        MDBoxLayout:
+            orientation: "vertical"
+            valign: "top"
+            spacing: dp(10)
+            padding: dp(0)
+            adaptive_height:True
+            pos_hint:{'top':1}
+            MDBoxLayout:
+                id:box
+                orientation:"vertical"
+                spacing:dp(5)
+                valign:"top"
+                pos_hint:{"center_x":0.5,"top":1}
+                adaptive_height:True
+                padding:dp(10)
+                MDRectangleFlatIconButton:
+                    icon:"map-marker-outline"
+                    text:root.location
+                    md_bg_color:(0,0,0,0)
+                    adaptive_height:True
+                    adaptive_width:True
+                    padding:-5
+                    spacing:0
+                    line_color:(0,0,0,0)
+                    text_color:"#414041"
+                    icon_color:"#414041"
+
+                MDLabel:
+                    text:"Bonjour "+root.nom
+                    adaptive_height:True
+                    bold:True
+                    padding:0
+                    font_size:20
+                MDLabel:
+                    text:"que voulez vous achetez aujourd’hui ?"
+                    adaptive_height:True
+                    font_size:14
+                    padding:0
+            ScrollView:
+                size_hint_y: None
+                height: dp(40)
+                bar_width: 0   # cache la barre de scroll
+                do_scroll_y: False
+                MDBoxLayout:
+                    id: tab_box
+                    orientation: "horizontal"
+                    adaptive_width: True
+                    height: dp(40)
+                    spacing: dp(10)
+                    padding: dp(10)
+
+                    Tab:
+                        text: "Tous"
+                        icon:"home-outline"
+                        select:False
+
+                        on_press:
+                            root.manager.transition=WipeTransition(duration=0.4, clearcolor=(1, 1, 1, 1))
+                            root.manager.current="main-home"
+                    Tab:
+                        text: "Boutique"
+                        icon:"cart-outline"
+                        select:True
+                    Tab:
+                        text: "Restaurant"
+                        icon:"silverware-variant"
+                        select:False
+                        on_press:
+                            root.manager.transition=WipeTransition(duration=0.4, clearcolor=(1, 1, 1, 1))
+                            root.manager.current="restaurant-home"
+
+
+            MDLabel:
+                text:"Boutique à proximité"
+                bold: True
+                padding:[10,0]
+                adaptive_height:True
+
+            MDScrollView:
+                size_hint_y: None
+                bar_width: 0   # cache la barre de scroll
+                do_scroll_y: False
+                height: dp(110)
+                MDBoxLayout:
+                    id: rv_near_boutique
+                    orientation: "horizontal"
+                    adaptive_width: True
+                    height: dp(100)
+                    spacing: dp(10)
+                    padding: [dp(10),dp(5)]
+            MDSeparator:
+                color:app.COLORS["light"]
+                height:dp(1)
+
+            # --- Meilleurs restaurants ---
+            MDLabel:
+                text:"Tous les boutiques"
+                bold: True
+                padding:[10,0]
+                adaptive_height:True
+
+            MDBoxLayout:
+                size_hint_y:None
+                height:dp(screenBoutique.height/1.8)
+
+                RecycleView:
+                    id: rv_boutique
+                    viewclass: "RestauListItem"
+                    RecycleBoxLayout:
+                        orientation: "vertical"
+                        default_size: None, dp(100)
+                        default_size_hint: 1, None
+                        size_hint_y: None
+                        spacing: dp(10)
+                        height: self.minimum_height
+
+<SearchPage>:
+    BoxLayout:
+        orientation: "vertical"
+        spacing: dp(10)
+        padding: dp(10)
+        MDBoxLayout:
+            adaptive_height:True
+            spacing:10
+
+            MDCard:
+                size_hint:1,None
+                height:dp(40)
+                pos_hint:{"center_x":0.5,"center_y":.5}
+                radius:[self.height/2]
+                padding:10
+                spacing:10
+                md_bg_color:app.COLORS["light"]
+                MDIcon:
+                    icon:"magnify"
+                    adaptive_size:True
+                    color:app.COLORS["normal"]
+                    pos_hint:{"center_x":0.5,"center_y":.5}
+                MDTextField:
+
+                    size_hint_x:.9
+                    pos_hint:{"center_x":0.5,"center_y":.5}
+                    halign:"left"
+                    theme_text_color:"Custom"
+                    text_size:sp(16)
+                    text_color_normal:app.COLORS["normal"]
+                    text_color_focus:app.COLORS["dark"]
+                    hint_text:"Rechercher"
+                    line_color_focus:1,1,0,0
+                    line_color_normal:1,1,0,0
+                    hint_text_color:1,1,0,0
+                    hint_text_color_focus:1,1,1,0
+                    multiline:False
+                    on_text:
+                        root.search(self.text)
+
+        LimitedScrollView:
+            limit_scroll:True
+            size_hint: 1,1
+            MDBoxLayout:
+                id:main_box
+                orientation: "vertical"
+                valign: "top"
+                spacing: dp(10)
+                padding: dp(0)
+                adaptive_height:True
+                pos_hint:{'top':1}
+
+                MDLabel:
+                    text:"Boutique"
+                    adaptive_height:True
+                    font_size:sp(18)
+                    bold:True
+                    padding:[0,dp(10),0,0]
+
+                MDBoxLayout:
+                    id: shop_box_search
+                    orientation: "vertical"
+                    size_hint_y: None
+                    adaptive_height: True
+                    spacing: dp(0)
+                    padding: [0,dp(10)]
+
+                MDSeparator:
+                    color:app.COLORS["light"]
+                    height:dp(1)
+                MDLabel:
+                    text:"Restaurant"
+                    adaptive_height:True
+                    font_size:sp(18)
+                    bold:True
+                    padding:0
+                MDBoxLayout:
+                    id: restau_box_search
+                    orientation: "vertical"
+                    size_hint_y: None
+                    adaptive_height: True
+                    spacing: dp(0)
+                    padding: [0,dp(10)]
+
+                MDSeparator:
+                    color:app.COLORS["light"]
+                    height:dp(1)
+                MDLabel:
+                    text:"Plat"
+                    adaptive_height:True
+                    font_size:sp(18)
+                    bold:True
+                    padding:0
+
+                MDBoxLayout:
+                    id: plat_box_search
+                    orientation: "vertical"
+                    size_hint_y: None
+                    adaptive_height: True
+                    spacing: dp(0)
+                    padding: [0,dp(10)]
+
+                MDSeparator:
+                    color:app.COLORS["light"]
+                    height:dp(1)
+                MDLabel:
+                    text:"Produit"
+                    adaptive_height:True
+                    font_size:sp(18)
+                    bold:True
+                    padding:0
+
+                MDBoxLayout:
+                    id: product_box_search
+                    orientation: "vertical"
+                    size_hint_y: None
+                    adaptive_height: True
+                    spacing: dp(0)
+                    padding: [0,dp(10)]
+                MDSeparator:
+                    color:app.COLORS["light"]
+                    height:dp(1)
+
+
+
+
+

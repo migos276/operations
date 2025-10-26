@@ -1,0 +1,604 @@
+#:import dp kivy.metrics.dp
+#:import sp kivy.metrics.sp
+#:import Window kivy.core.window
+
+
+
+<MainProfile>:
+    MDScrollView:
+        MDBoxLayout:
+            adaptive_height:True
+            orientation:"vertical"
+            padding:0
+            spacing:0
+            OneLineListItem:
+                text:"Vente totale de la journée  "+str(root.total_vente)+" plats"
+            OneLineListItem:
+                text:"Montant totale de la journée  "+str(root.total_montant)+" fcfa"
+            MDBoxLayout:
+                adaptive_height:True
+                padding:0
+                spacing:dp(10)
+                MDIcon:
+                    icon:"star-outline"
+                    adaptive_size:True
+                    valign:"center"
+                    padding:dp(10)
+                    pos_hint:{"center_y":.5}
+                    font_size:sp(16)
+                    color:app.COLORS["dark"]
+                OneLineListItem:
+                    text:str(root.rate)
+
+            OneLineIconListItem:
+                text:"Menu hebdomadaire"
+                on_press:root.manager.current="menu-hebdo"
+                IconLeftWidget:
+                    icon:"calendar-week"
+            OneLineIconListItem:
+                text:"Menu constant"
+                on_press:root.manager.current="menu-static"
+                IconLeftWidget:
+                    icon:"book-open-variant"
+            OneLineIconListItem:
+                text:"Tous les plats"
+                on_press:root.manager.current ="global-plat"
+                IconLeftWidget:
+                    icon:"food-outline"
+            OneLineIconListItem:
+                text:"Livreur"
+                on_press:root.manager.current ="livreur"
+                IconLeftWidget:
+                    icon:"motorbike"
+            OneLineIconListItem:
+                text:"Heure de travail"
+                on_press:root.manager.current ="horaire"
+                IconLeftWidget:
+                    icon:"clock-outline"
+<DayCard>:
+    text: root.day
+    secondary_text: "de "+root.data["heure"]["ouverture"]+" jusqu'à "+root.data["heure"]["fermeture"]
+    on_press:
+        next=root.manager.get_screen("menu")
+        next.data=root.data["menu"]
+        next.jour=root.day
+        root.manager.current="menu"
+    IconRightWidget:
+        icon: "arrow.png"
+        theme_icon_color: "Custom"
+        icon_color: app.COLORS["normal"]
+
+<RvCard>:
+    key_viewclass: 'viewclass'
+    RecycleBoxLayout:
+        default_size: None, dp(100)
+        default_size_hint: 1, None
+        size_hint_y: None
+        spacing:0
+        height: self.minimum_height
+        orientation: 'vertical'
+
+
+<RvPlatCard>:
+    key_viewclass: 'viewclass'
+    scroll_type: ['content']
+    RecycleGridLayout:
+        cols:root.col_number
+        default_size: dp(100),None
+        default_size_hint: None, None
+        size_hint_y: None
+        height: self.minimum_height
+        spacing: dp(10)
+        padding: dp(10)
+<AddPlatPage>:
+    MDScrollView:
+        MDBoxLayout:
+            orientation:"vertical"
+            adaptive_height:True
+            pos_hint:{"center_x":0.5,"center_y":.5}
+            spacing:dp(10)
+            MDBoxLayout:
+                adaptive_height:True
+                padding:dp(10)
+                MDIconButton:
+                    icon:"arrow-left"
+                    md_bg_color:app.COLORS["light"]
+                    theme_icon_color:"Custom"
+                    icon_color:app.COLORS["normal"]
+                    on_press:root.go_back()
+                MDLabel:
+                    text:"Ajouter un plat au menu"
+                    font_size:sp(16)
+                    bold:True
+                    adaptive_height:True
+                    halign:"center"
+                    pos_hint:{"center_x":0.5,"center_y":.5}
+            MDBoxLayout:
+                spacing:dp(10)
+                adaptive_height:True
+                MDCheckbox:
+                    group: 'plat'
+                    size_hint: None, None
+                    size: dp(48), dp(48)
+                    active:True
+                    value:"select"
+                    on_active:
+                        root.get_check(self,self.active,self.value)
+                        select_plat.disabled=False
+                        create_plat.disabled=True
+                        img_card.disabled=True
+                        select_img.md_bg_color=app.COLORS["light"]
+                        select_img.icon_color=app.COLORS["normal"]
+
+                MDLabel:
+                    text:"choisir un plat déjà éxistant"
+                    font_size:sp(16)
+                    adaptive_height:True
+                    pos_hint:{"center_x":0.5,"center_y":.5}
+            MDTextField:
+                id:select_plat
+                adaptive_height:True
+                value:"1"
+                size_hint_x:.9
+                hint_text:"plat"
+                pos_hint:{"center_x":0.5,"center_y":.5}
+                multiline:False
+                on_focus:
+                    next = root.manager.get_screen("selectionner-plat")
+                    next.saver=self
+                    next.prev_name="ajouter-plat"
+                    root.manager.current = "selectionner-plat"
+            MDSeparator:
+                color:app.COLORS["light"]
+                height:dp(1)
+            MDBoxLayout:
+                spacing:dp(10)
+                adaptive_height:True
+                MDCheckbox:
+                    group: 'plat'
+                    size_hint: None, None
+                    size: dp(48), dp(48)
+                    value:"create"
+                    on_active:
+                        root.get_check(self,self.active,self.value)
+                        select_plat.disabled=True
+                        create_plat.disabled=False
+                        img_card.disabled=False
+                        select_img.md_bg_color=app.COLORS["primary"]
+                        select_img.icon_color=app.COLORS["bg"]
+
+                MDLabel:
+                    text:"nouveau plat"
+                    font_size:sp(16)
+                    adaptive_height:True
+                    pos_hint:{"center_x":0.5,"center_y":.5}
+            MDCard:
+                id:img_card
+                disabled:True
+                size_hint:None,None
+                size:100,100
+                pos_hint:{"center_x":0.5,"center_y":.5}
+
+                MDRelativeLayout:
+                    FitImage:
+                        id:img
+                        size_hint:None,None
+                        size:100,100
+                        source:"arrow.png"
+                        pos_hint:{"center_x":0.5,"center_y":.5}
+                    MDIconButton:
+                        id:select_img
+                        icon:"pen"
+                        md_bg_color:app.COLORS["light"]
+                        icon_size:dp(15)
+                        size_hint:None,None
+                        size:dp(36),dp(36)
+                        theme_icon_color:"Custom"
+                        icon_color:app.COLORS["normal"]
+                        pos_hint:{"center_x":1,"center_y":0}
+                        on_press:app.file_manager_open(saver=img)
+
+
+            MDTextField:
+                id:create_plat
+                adaptive_height:True
+                size_hint_x:.9
+                hint_text:"nom du nouveau plat"
+                pos_hint:{"center_x":0.5,"center_y":.5}
+                multiline:False
+                disabled:True
+            MDSeparator:
+                color:app.COLORS["light"]
+                height:dp(1)
+            MDTextField:
+                id:prix
+                adaptive_height:True
+                size_hint_x:.9
+                hint_text:"prix"
+                pos_hint:{"center_x":0.5,"center_y":.5}
+                multiline:False
+            MDTextField:
+                id:description
+                adaptive_height:True
+                size_hint_x:.9
+                hint_text:"Description"
+                pos_hint:{"center_x":0.5,"center_y":.5}
+                max_height:dp(200)
+                multiline:True
+            MDRectangleFlatButton:
+                text:"Enregistrer"
+                font_style:"Button"
+                md_bg_color:"#A90404"
+                line_color:(0,0,0,0)
+                text_color:"#ffffff"
+                pos_hint:{"center_x":0.5,"center_y":.5}
+                on_press:
+                    root.add_plat(select_plat.value,create_plat.text,img.source,prix.text,description.text)
+
+<AddStaticPlatPage>:
+    MDScrollView:
+        MDBoxLayout:
+            orientation:"vertical"
+            adaptive_height:True
+            pos_hint:{"center_x":0.5,"center_y":.5}
+            spacing:dp(10)
+            MDBoxLayout:
+                adaptive_height:True
+                padding:dp(10)
+                MDIconButton:
+                    icon:"arrow-left"
+                    md_bg_color:app.COLORS["light"]
+                    theme_icon_color:"Custom"
+                    icon_color:app.COLORS["normal"]
+                    on_press:root.go_back()
+                MDLabel:
+                    text:"Ajouter un plat au menu"
+                    font_size:sp(16)
+                    bold:True
+                    adaptive_height:True
+                    halign:"center"
+                    pos_hint:{"center_x":0.5,"center_y":.5}
+            MDBoxLayout:
+                spacing:dp(10)
+                adaptive_height:True
+                MDCheckbox:
+                    group: 'plat'
+                    size_hint: None, None
+                    size: dp(48), dp(48)
+                    active:True
+                    value:"select"
+                    on_active:
+                        root.get_check(self,self.active,self.value)
+                        select_plat.disabled=False
+                        create_plat.disabled=True
+                        img_card.disabled=True
+                        select_img.md_bg_color=app.COLORS["light"]
+                        select_img.icon_color=app.COLORS["normal"]
+
+                MDLabel:
+                    text:"choisir un plat déjà éxistant"
+                    font_size:sp(16)
+                    adaptive_height:True
+                    pos_hint:{"center_x":0.5,"center_y":.5}
+            MDTextField:
+                id:select_plat
+                adaptive_height:True
+                value:"1"
+                size_hint_x:.9
+                hint_text:"plat"
+                pos_hint:{"center_x":0.5,"center_y":.5}
+                multiline:False
+                on_focus:
+                    next = root.manager.get_screen("selectionner-plat")
+                    next.saver=self
+                    next.prev_name="ajouter-plat-static"
+                    root.manager.current = "selectionner-plat"
+            MDSeparator:
+                color:app.COLORS["light"]
+                height:dp(1)
+            MDBoxLayout:
+                spacing:dp(10)
+                adaptive_height:True
+                MDCheckbox:
+                    group: 'plat'
+                    size_hint: None, None
+                    size: dp(48), dp(48)
+                    value:"create"
+                    on_active:
+                        root.get_check(self,self.active,self.value)
+                        select_plat.disabled=True
+                        create_plat.disabled=False
+                        img_card.disabled=False
+                        select_img.md_bg_color=app.COLORS["primary"]
+                        select_img.icon_color=app.COLORS["bg"]
+
+                MDLabel:
+                    text:"nouveau plat"
+                    font_size:sp(16)
+                    adaptive_height:True
+                    pos_hint:{"center_x":0.5,"center_y":.5}
+            MDCard:
+                id:img_card
+                disabled:True
+                size_hint:None,None
+                size:100,100
+                pos_hint:{"center_x":0.5,"center_y":.5}
+
+                MDRelativeLayout:
+                    FitImage:
+                        id:img
+                        size_hint:None,None
+                        size:100,100
+                        source:"arrow.png"
+                        pos_hint:{"center_x":0.5,"center_y":.5}
+                    MDIconButton:
+                        id:select_img
+                        icon:"pen"
+                        md_bg_color:app.COLORS["light"]
+                        icon_size:dp(15)
+                        size_hint:None,None
+                        size:dp(36),dp(36)
+                        theme_icon_color:"Custom"
+                        icon_color:app.COLORS["normal"]
+                        pos_hint:{"center_x":1,"center_y":0}
+                        on_press:app.file_manager_open(saver=img)
+
+
+            MDTextField:
+                id:create_plat
+                adaptive_height:True
+                size_hint_x:.9
+                hint_text:"nom du nouveau plat"
+                pos_hint:{"center_x":0.5,"center_y":.5}
+                multiline:False
+                disabled:True
+            MDSeparator:
+                color:app.COLORS["light"]
+                height:dp(1)
+            MDTextField:
+                id:prix
+                adaptive_height:True
+                size_hint_x:.9
+                hint_text:"prix"
+                pos_hint:{"center_x":0.5,"center_y":.5}
+                multiline:False
+            MDTextField:
+                id:description
+                adaptive_height:True
+                size_hint_x:.9
+                hint_text:"Description"
+                pos_hint:{"center_x":0.5,"center_y":.5}
+                max_height:dp(200)
+                multiline:True
+            MDRectangleFlatButton:
+                text:"Enregistrer"
+                font_style:"Button"
+                md_bg_color:"#A90404"
+                line_color:(0,0,0,0)
+                text_color:"#ffffff"
+                pos_hint:{"center_x":0.5,"center_y":.5}
+                on_press:
+                    root.add_plat(select_plat.value,create_plat.text,img.source,prix.text,description.text)
+
+<AddGlobalePlatPage>:
+    MDBoxLayout:
+        orientation:"vertical"
+        adaptive_height:True
+        pos_hint:{"center_x":0.5,"top":1}
+        spacing:dp(10)
+        MDBoxLayout:
+            adaptive_height:True
+            padding:dp(10)
+            MDIconButton:
+                icon:"arrow-left"
+                md_bg_color:app.COLORS["light"]
+                theme_icon_color:"Custom"
+                icon_color:app.COLORS["normal"]
+                on_press:root.go_back()
+            MDLabel:
+                text:"Nouveau Plat"
+                font_size:sp(16)
+                bold:True
+                adaptive_height:True
+                halign:"center"
+                pos_hint:{"center_x":0.5,"center_y":.5}
+        MDCard:
+            id:img_card
+            size_hint:None,None
+            size:100,100
+            pos_hint:{"center_x":0.5,"center_y":.5}
+
+            MDRelativeLayout:
+                FitImage:
+                    id:img
+                    size_hint:None,None
+                    size:100,100
+                    source:"arrow.png"
+                    pos_hint:{"center_x":0.5,"center_y":.5}
+                MDIconButton:
+                    id:select_img
+                    icon:"pen"
+                    md_bg_color:app.COLORS["light"]
+                    icon_size:dp(15)
+                    size_hint:None,None
+                    size:dp(36),dp(36)
+                    theme_icon_color:"Custom"
+                    icon_color:app.COLORS["primary"]
+                    pos_hint:{"center_x":1,"center_y":0}
+                    on_press:app.file_manager_open(saver=img)
+
+
+        MDTextField:
+            id:create_plat
+            adaptive_height:True
+            size_hint_x:.9
+            hint_text:"nom du nouveau plat"
+            pos_hint:{"center_x":0.5,"center_y":.5}
+            multiline:False
+
+
+        MDRectangleFlatButton:
+            text:"Enregistrer"
+            font_style:"Button"
+            md_bg_color:"#A90404"
+            line_color:(0,0,0,0)
+            text_color:"#ffffff"
+            pos_hint:{"center_x":0.5,"center_y":.5}
+            on_press:
+                root.add_plat(create_plat.text,img.source)
+
+<AddLivreurPage>:
+    MDBoxLayout:
+        orientation:"vertical"
+        pos_hint:{"center_x": 0.5, "top": 1}
+        spacing:10
+        padding:10
+        MDIconButton:
+            icon:"arrow-left"
+            md_bg_color:app.COLORS["light"]
+            theme_icon_color:"Custom"
+            icon_color:app.COLORS["normal"]
+            on_press:
+                root.go_back()
+        Image:
+            id:qrcode
+            source:root.qrcode
+        MDLabel:
+            text:"laisser le livreur scanner le qrcode"
+            adaptive_height:True
+            font_size:sp(14)
+            halign:"center"
+
+<EditHorairePage>:
+    MDBoxLayout:
+        orientation:"vertical"
+        pos_hint:{"center_x": 0.5, "top": 1}
+        spacing:10
+        padding:10
+
+        MDBoxLayout:
+            adaptive_height:True
+            MDIconButton:
+                icon:"arrow-left"
+                md_bg_color:app.COLORS["light"]
+                theme_icon_color:"Custom"
+                icon_color:app.COLORS["normal"]
+                on_press:
+                    root.go_back()
+            MDLabel:
+                text:"Modifier les horaire"
+                font_size:sp(16)
+                bold:True
+                adaptive_height:True
+                halign:"center"
+                pos_hint:{"center_x":0.5,"center_y":.5}
+        MDScrollView:
+            MDBoxLayout:
+                orientation:"vertical"
+                adaptive_height:True
+                pos_hint:{"center_x": 0.5, "top": 1}
+                spacing:10
+                padding:0
+                MDTextField:
+                    id:ouverture
+                    hint_text:"heure d'ouverture"
+                    on_focus:root.show_time_picker(self)
+
+                MDTextField:
+                    id:fermeture
+                    hint_text:"heure de fermeture"
+                    on_focus:root.show_time_picker(self)
+
+                MDGridLayout:
+                    cols:2
+
+                    MDBoxLayout:
+                        adaptive_height:True
+                        MDCheckbox:
+                            id:lun
+                            value:"lundi"
+                            on_active: root.get_select_day(self.active,self.value)
+                        MDLabel:
+                            text:"lundi"
+
+                    MDBoxLayout:
+                        adaptive_height:True
+                        MDCheckbox:
+                            id:mar
+                            value:"mardi"
+                            on_active: root.get_select_day(self.active,self.value)
+                        MDLabel:
+                            text:"mardi"
+
+
+                    MDBoxLayout:
+                        adaptive_height:True
+                        MDCheckbox:
+                            id:mer
+                            value:"mercredi"
+                            on_active: root.get_select_day(self.active,self.value)
+                        MDLabel:
+                            text:"mercredi"
+
+                    MDBoxLayout:
+                        adaptive_height:True
+                        MDCheckbox:
+                            id:jeu
+                            value:"jeudi"
+                            on_active: root.get_select_day(self.active,self.value)
+                        MDLabel:
+                            text:"jeudi"
+
+                    MDBoxLayout:
+                        adaptive_height:True
+                        MDCheckbox:
+                            id:ven
+                            value:"vendredi"
+                            on_active: root.get_select_day(self.active,self.value)
+                        MDLabel:
+                            text:"vendredi"
+
+                    MDBoxLayout:
+                        adaptive_height:True
+                        MDCheckbox:
+                            id:sam
+                            value:"samedi"
+                            on_active: root.get_select_day(self.active,self.value)
+                        MDLabel:
+                            text:"samedi"
+                    MDBoxLayout:
+                        adaptive_height:True
+                        MDCheckbox:
+                            id:dim
+                            value:"dimanche"
+                            on_active: root.get_select_day(self.active,self.value)
+                        MDLabel:
+                            text:"dimanche"
+
+                    MDRelativeLayout:
+                        adaptive_height:True
+                        MDTextButton:
+                            adaptive_size:True
+                            text:"Tous Les Jours"
+                            theme_text_color:"Custom"
+                            text_color:app.COLORS["normal"]
+                            pos_hint:{"center_x":0.5,"center_y":.5}
+                            on_press:
+                                lun.active=True
+                                mar.active=True
+                                mer.active=True
+                                jeu.active=True
+                                ven.active=True
+                                sam.active=True
+                                dim.active=True
+
+
+        MDRectangleFlatButton:
+            text:"Appliquer"
+            font_style:"Button"
+            md_bg_color:"#A90404"
+            line_color:(0,0,0,0)
+            text_color:"#ffffff"
+            pos_hint:{"center_x":0.5,"center_y":.5}
+            on_release:
+                root.update_horaire(ouverture.text,fermeture.text)

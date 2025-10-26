@@ -1,0 +1,108 @@
+
+<RestaurantPage>:
+    BoxLayout:
+        orientation: "vertical"
+        valign: "top"
+        spacing: dp(0)
+        padding: dp(0)
+        pos_hint:{'top':1}
+        Image:
+            source:(root.image+root.data["user"]["logo"])  if root.data.get("user") else "img/kmc.png"
+            keep_ratio:True
+            size_hint:1,None
+            height:130
+            fit_mode:"cover"
+        MDLabel:
+            text:root.data["user"]["username"] if root.data.get("user") else "Aucun"
+            padding: [0,dp(10),0,0]
+            adaptive_height:True
+            halign:"center"
+            font_size:sp(18)
+            bold:True
+            color:app.COLORS["dark"]
+        MDLabel:
+            text:root.heure
+            adaptive_height:True
+            padding:  [0,0,0,dp(10)]
+            halign:"center"
+            color:app.COLORS["normal"]
+        MDCard:
+            size_hint:.9,None
+            height:dp(40)
+            pos_hint:{"center_x":0.5,"center_y":.5}
+            radius:[self.height/2]
+            padding:10
+            spacing:10
+            md_bg_color:app.COLORS["light"]
+            MDIcon:
+                icon:"magnify"
+                adaptive_size:True
+                color:app.COLORS["normal"]
+                pos_hint:{"center_x":0.5,"center_y":.5}
+            MDTextField:
+
+                size_hint_x:.9
+                pos_hint:{"center_x":0.5,"center_y":.5}
+                halign:"left"
+                theme_text_color:"Custom"
+                text_size:sp(16)
+                text_color_normal:app.COLORS["normal"]
+                text_color_focus:app.COLORS["dark"]
+                hint_text:"Rechercher"
+                line_color_focus:1,1,0,0
+                line_color_normal:1,1,0,0
+                hint_text_color:1,1,0,0
+                hint_text_color_focus:1,1,1,0
+                multiline:False
+                on_text:
+                    root.search(self.text)
+        MDBoxLayout:
+            MDBottomNavigation:
+                selected_color_background: app.COLORS["primary"]
+                text_color_active: app.COLORS["light"]
+
+                MDBottomNavigationItem:
+                    name: 'menu_hebdo'
+                    text: 'menu hebdomadaire'
+                    icon: 'calendar-week'
+                    MenuHebdoPage:
+                        id:meu_hebdo
+
+                MDBottomNavigationItem:
+                    name: 'static_menu'
+                    text: 'plat constant'
+                    icon: 'book-open-variant'
+                    Menu_Statique:
+                        id:menu_stat
+
+
+    MDAnchorLayout:
+        anchor_y:"top"
+        MDBoxLayout:
+            adaptive_height:True
+            padding:dp(10)
+            MDIconButton:
+                icon:"arrow-left"
+                md_bg_color:0,0,0,0.4
+                theme_icon_color:"Custom"
+                icon_color:app.COLORS["bg"]
+                on_release:app.screen.go_to(root.prev)
+            Widget:
+            MDIconButton:
+                icon:"dots-vertical"
+                md_bg_color:0,0,0,0.4
+                theme_icon_color:"Custom"
+                icon_color:app.COLORS["bg"]
+
+<Menu_Statique>:
+    LimitedRV:
+        id: rv
+        data:[]
+        viewclass: "RestauListItem"
+        RecycleBoxLayout:
+            orientation: "vertical"
+            default_size: None, dp(100)
+            default_size_hint: 1, None
+            size_hint_y: None
+            spacing: dp(10)
+            height: self.minimum_height

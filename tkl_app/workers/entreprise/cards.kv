@@ -1,0 +1,264 @@
+#:import dp kivy.metrics.dp
+#:import sp kivy.metrics.sp
+<ActiveCommandCard>:
+    orientation:"vertical"
+    width:dp(150)
+    padding:dp(10)
+    size_hint:None,None
+    adaptive_height:True
+    md_bg_color:app.COLORS["light"]
+    MDLabel:
+        text:"commande "+ str(root.data["id"])
+        font_size:sp(16)
+        adaptive_height:True
+        color:app.COLORS["dark"]
+        bold:True
+    MDLabel:
+        text:root.data["client"]["username"]+",\n"+str(root.data["position"]["lieu"])
+        font_size:sp(16)
+        adaptive_height:True
+        color:app.COLORS["dark"]
+    MDLabel:
+        text:root.data["status"]
+        font_size:sp(16)
+        adaptive_height:True
+        color:app.COLORS["normal"]
+
+<CommandAskCard>:
+    orientation:"vertical"
+    width:dp(190)
+    padding:dp(10)
+    spacing:dp(20)
+    size_hint:None,None
+    adaptive_height:True
+    md_bg_color:app.COLORS["light"]
+    MDBoxLayout:
+        orientation:"vertical"
+        adaptive_height:True
+        padding:dp(0)
+        spacing:dp(0)
+        MDLabel:
+            text:"commande "+ str(root.data["id"])
+            font_size:sp(16)
+            adaptive_height:True
+            color:app.COLORS["dark"]
+            bold:True
+        MDLabel:
+            text:root.data["client"]["username"]+",\n"+str(root.data["position"]["lieu"])
+            font_size:sp(16)
+            adaptive_height:True
+            color:app.COLORS["dark"]
+        MDLabel:
+            text:root.data["status"]
+            font_size:sp(16)
+            adaptive_height:True
+            color:app.COLORS["normal"]
+    MDBoxLayout:
+        adaptive_size:True
+        padding:dp(0)
+        spacing:dp(10)
+
+        MDRectangleFlatButton:
+            text:"accepter"
+            line_color:0,0,0,0
+            md_bg_color:app.COLORS["primary"]
+            text_color:app.COLORS["bg"]
+        MDTextButton:
+            text:"refuser"
+            color:app.COLORS["normal"]
+            pos_hint:{"center_x":.5,"center_y":.5}
+
+<MenuPlatCard>
+    padding:0
+    size_hint:1,None
+    spacing:dp(10)
+    adaptive_height:True
+    pos_hint:{"x":0}
+    FitImage:
+        source:root.image
+        size_hint:None,None
+        size:dp(100),dp(100)
+
+    MDBoxLayout:
+        text_halign:"center"
+        orientation:"vertical"
+        adaptive_height:True
+        pos_hint:{"top":1}
+        MDLabel:
+            text:root.nom
+            font_size:sp(18)
+            adaptive_height:True
+            color:app.COLORS["dark"]
+            pos_hint:{"top":1}
+            bold:True
+        MDLabel:
+            text:str(root.data["prix"])+" fcfa"
+            font_size:sp(16)
+            adaptive_height:True
+            color:app.COLORS["primary"]
+        MDLabel:
+            text:root.data["description"]
+            font_size:sp(14)
+            adaptive_height:True
+            color:app.COLORS["dark"]
+
+<CurrentMenuPlatCard>:
+    padding:0
+    height:dp(100)
+    size_hint_x:1
+    spacing:dp(10)
+    adaptive_height:True
+    pos_hint:{"x":0}
+    FitImage:
+        source:root.data["image"]
+        size_hint:None,None
+        size:dp(100),dp(100)
+
+    MDBoxLayout:
+        text_halign:"center"
+        orientation:"vertical"
+        adaptive_height:True
+        pos_hint:{"top":1}
+        MDLabel:
+            text:str(root.data["nom"]).capitalize()
+            font_size:sp(18)
+            adaptive_height:True
+            color:app.COLORS["dark"]
+            pos_hint:{"top":1}
+            bold:True
+        MDLabel:
+            text:str(root.data["prix"])+" fcfa"
+            font_size:sp(16)
+            adaptive_height:True
+            color:app.COLORS["primary"]
+        MDLabel:
+            text:root.data["description"]
+            font_size:sp(16)
+            adaptive_height:True
+            color:app.COLORS["dark"]
+        MDBoxLayout:
+            spacing:0
+            padding:0
+            adaptive_height:True
+
+            MDLabel:
+                text:str(root.data["rate"])
+                font_size:sp(14)
+                halign:"left"
+                adaptive_size:True
+                pos_hint:{"center_y":.5}
+                color:app.COLORS["normal"]
+
+            MDIcon:
+                icon:"star"
+                adaptive_size:True
+                valign:"center"
+                font_size:sp(14)
+                size_hint:None,None
+                pos_hint:{"center_y":.5}
+                color:app.COLORS["normal"]
+    MDRoundFlatButton:
+        text:"fini"
+        pos_hint:{"center_x":.5,"center_y":.5}
+        line_color:0,0,0,0
+        md_bg_color:app.COLORS["primary"]
+        text_color:app.COLORS["bg"]
+
+<PlatCard>:
+    padding:0
+    width:dp(100)
+    size_hint_x:None
+
+    spacing:dp(0)
+    adaptive_height:True
+    pos_hint:{"x":0}
+    orientation:"vertical"
+    radius:[10]
+    md_bg_color:app.COLORS["light"]
+    line_width:dp(1)
+    FitImage:
+        radius:[10,10,0,0]
+        source:'https://res.cloudinary.com/dznrirg5t/image/upload/v1760382238/j3qf7ey3am0saehenkwo.jpg'
+        size_hint:None,None
+        size:dp(100),dp(100)
+
+    MDLabel:
+        padding:10
+        text:str(root.data["plat"]["nom"]).capitalize() if root.data.get("plat") else "Plat inconnu"
+        font_size:sp(18)
+        adaptive_height:True
+        color:app.COLORS["dark"]
+        pos_hint:{"top":1}
+
+<MenuPlatSwipeToDeleteItem>:
+    size_hint_y:None
+    anchor:"right"
+    height:self.ids.frontbox.height
+    radius:[0]
+
+    MDCardSwipeLayerBox:
+        size_hint_y:1
+        MDRelativeLayout:
+            MDIconButton:
+                icon: "trash-can"
+                pos_hint: {"center_y": .5,"right":.9}
+                on_release:root.delete()
+
+
+    MDCardSwipeFrontBox:
+        id:frontbox
+        size_hint_y: None
+        adaptive_height:True
+        radius:[0]
+        MenuPlatCard:
+            data : root.data
+            manager : root.manager
+            nom:root.nom
+            image:root.image
+            on_press:root.open_me()
+
+<LivreurCard>:
+    padding:[10,10]
+    size_hint:1,None
+    spacing:dp(10)
+    radius:[0]
+    adaptive_height:True
+    pos_hint:{"x":0}
+    MDIcon:
+        icon:"account"
+        adaptive_size:True
+        pos_hint: {"center_y": .5,"center_x":.5}
+
+    MDBoxLayout:
+        text_halign:"center"
+        orientation:"vertical"
+        adaptive_height:True
+        pos_hint:{"top":1}
+        MDLabel:
+            text:root.data["user"]["nom"] if root.data.get("plat") else "Kieran"
+            font_size:sp(16)
+            adaptive_height:True
+            color:app.COLORS["dark"]
+            pos_hint:{"top":1}
+            bold:True
+        MDLabel:
+            text:"matricule: "+str(root.data["matricule"]) if root.data.get("plat") else "matricule: "+"WE374781"
+            font_size:sp(16)
+            adaptive_height:True
+            color:app.COLORS["dark"]
+        MDLabel:
+            text:root.data["status"] if root.data.get("plat") else "occupé"
+            font_size:sp(14)
+            adaptive_height:True
+            color:app.COLORS["primary"]
+
+    MDIconButton:
+        icon:"trash-can"
+        md_bg_color:0,0,0,0
+        theme_icon_color:"Custom"
+        icon_color:app.COLORS["normal"]
+
+<HoraireCard>:
+    text:"Lundi"
+    secondary_text:"ouverture: 8:00"
+    tertiary_text:"fermeture: 18:00"

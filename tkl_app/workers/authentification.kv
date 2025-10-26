@@ -1,0 +1,221 @@
+#:import dp kivy.metrics.dp
+#:import sp kivy.metrics.sp
+<AuthentificationPage>:
+    MDScreenManager:
+        id:screen_manager
+        FirstTime:
+            name:"firstpage"
+            manager:screen_manager
+        ConnexionEntreprise:
+            name:"connexion-entreprise"
+            manager:screen_manager
+        ConnexionLivreur:
+            name:"connexion-livreur"
+            manager:screen_manager
+
+
+
+<FirstTime>:
+    MDBoxLayout:
+        orientation:"vertical"
+        spacing:dp(15)
+        padding:dp(10)
+        height:self.minimum_height
+        adaptive_height:True
+        pos_hint:{"center_x":0.5,"top":1}
+        MDFloatLayout:
+            adaptive_height:True
+            Image:
+                source:"img/logo.png"
+                size:150,125
+                keep_ratio:True
+                size:self.texture_size
+
+
+                pos_hint:{"center_x":0.5,"center_y":0.5}
+        MDSeparator:
+            color:app.COLORS["primary"]
+            height:dp(3)
+        MDLabel:
+            text:"Bienvenue sur Camer work\nConnecter vous à votre espace"
+            adaptive_height:True
+            halign:"center"
+            padding:30
+        MDBoxLayout:
+            orientation:"vertical"
+            spacing:dp(30)
+            padding:0
+            adaptive_height:True
+            MDRectangleFlatIconButton:
+                icon:"img/build.png"
+                text:"Entreprise"
+                theme_text_color:"Custom"
+                text_color:app.COLORS["dark"]
+                size_hint_x:1
+                line_color:0,0,0,0
+                md_bg_color:app.COLORS["light"]
+                font_size:sp(18)
+                on_press:root.manager.current="connexion-entreprise"
+                halign:"center"
+            MDRectangleFlatIconButton:
+                icon:"img/moped.png"
+                text:"Livreur"
+                theme_text_color:"Custom"
+                text_color:app.COLORS["dark"]
+                size_hint_x:1
+                line_color:0,0,0,0
+                md_bg_color:app.COLORS["light"]
+                font_size:sp(18)
+                on_press:root.manager.current="connexion-livreur"
+
+<ConnexionEntreprise>
+    MDBoxLayout:
+        orientation:"vertical"
+        spacing:dp(15)
+        padding:dp(10)
+        adaptive_height:True
+        pos_hint:{"center_x":0.5,"top":1}
+        MDIconButton:
+            icon:"arrow-left"
+            md_bg_color:app.COLORS["light"]
+            theme_icon_color:"Custom"
+            icon_color:app.COLORS["normal"]
+            on_press:root.manager.current="firstpage"
+        MDFloatLayout:
+            adaptive_height:True
+            Image:
+                source:"img/logo.png"
+                size:150,125
+                keep_ratio:True
+                size:self.texture_size
+
+
+                pos_hint:{"center_x":0.5,"center_y":0.5}
+        MDSeparator:
+            color:app.COLORS["primary"]
+            height:dp(3)
+        MDBoxLayout:
+            orientation:"vertical"
+            spacing:dp(30)
+            padding:dp(0)
+            adaptive_height:True
+            pos_hint:{"center_x":0.5,"center_y":.5}
+
+            MDTextField:
+                id:passwordInput
+                mode:"rectangle"
+                hint_text:"code"
+                size_hint_x:.9
+                height:self.minimum_height
+                pos_hint:{"center_x":0.5}
+                font_size:sp(18)
+                adaptive_height:True
+                multiline:False
+                max_text_length: 10
+                helper_text:"le code ne posséde que 10 caractères"
+                helper_text_mode:"on_error"
+                password:"True"
+
+
+            MDBoxLayout:
+                orientation:"vertical"
+                spacing:0
+                adaptive_height:True
+                MDIconButton:
+                    icon:"eye-off"
+                    pos_hint:{"center_x":0.5}
+                    on_release:
+                        self.icon = "eye" if self.icon == "eye-off" else "eye-off"
+                        passwordInput.password = False if self.icon == "eye" else True
+                MDBoxLayout:
+                    orientation:"vertical"
+                    spacing:dp(20)
+                    adaptive_height:True
+                    padding:dp(10)
+                    MDRectangleFlatButton:
+                        text:"connexion"
+                        font_style:"Button"
+                        md_bg_color:"#A90404"
+                        size_hint_x:1
+                        line_color:(0,0,0,0)
+                        text_color:"#ffffff"
+                        on_press:root.login(passwordInput)
+<ConnexionLivreur>:
+    MDBoxLayout:
+        orientation:"vertical"
+        spacing:dp(15)
+        padding:dp(10)
+        height:self.minimum_height
+        adaptive_height:True
+        pos_hint:{"center_x":0.5,"top":1}
+        MDIconButton:
+            icon:"arrow-left"
+            md_bg_color:app.COLORS["light"]
+            theme_icon_color:"Custom"
+            icon_color:app.COLORS["normal"]
+            on_press:root.manager.current="firstpage"
+        MDFloatLayout:
+            adaptive_height:True
+            Image:
+                source:"img/logo.png"
+                size:150,125
+                keep_ratio:True
+                size:self.texture_size
+
+
+                pos_hint:{"center_x":0.5,"center_y":0.5}
+        MDSeparator:
+            color:app.COLORS["primary"]
+            height:dp(3)
+        MDBoxLayout:
+            orientation:"vertical"
+            spacing:0
+            adaptive_height:True
+            MDTextField:
+                id:emailInput
+                hint_text:"Email"
+                size_hint_x:.9
+                validator: "email"
+                height:self.minimum_height
+                helper_text:"Entrer un email au format xyz@gmail.com"
+                helper_text_mode:"on_error"
+                pos_hint:{"center_x":0.5}
+                adaptive_height:True
+                multiline:False
+            MDTextField:
+                id:passwordInput
+                hint_text:"Mot de passe"
+                size_hint_x:.9
+                height:self.minimum_height
+                pos_hint:{"center_x":0.5}
+                adaptive_height:True
+                multiline:False
+                password:"True"
+
+
+
+        MDBoxLayout:
+            orientation:"vertical"
+            spacing:0
+            adaptive_height:True
+            MDIconButton:
+                icon:"eye-off"
+                pos_hint:{"center_x":0.5}
+                on_release:
+                    self.icon = "eye" if self.icon == "eye-off" else "eye-off"
+                    passwordInput.password = False if self.icon == "eye" else True
+            MDBoxLayout:
+                orientation:"vertical"
+                spacing:dp(20)
+                adaptive_height:True
+                padding:dp(10)
+                MDRectangleFlatButton:
+                    text:"connexion"
+                    font_style:"Button"
+                    md_bg_color:"#A90404"
+                    size_hint_x:1
+                    line_color:(0,0,0,0)
+                    text_color:"#ffffff"
+                    on_press:root.login(emailInput,passwordInput)
+
+

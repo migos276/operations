@@ -1,0 +1,77 @@
+<MainHome>:
+    MDScrollView:
+        MDBoxLayout:
+            orientation: "vertical"
+            spacing: dp(15)
+            adaptive_height: True
+            padding: dp(10)
+
+            MDLabel:
+                text: "Bonjour KIERAN,"
+                font_style: "H6"
+                halign: "left"
+
+            MDLabel:
+                text: "que voulez vous acheter aujourd’hui ?"
+                theme_text_color: "Secondary"
+                font_style: "Body2"
+
+            # --- Commerces à proximité ---
+            MDLabel:
+                text: "Commerces à proximité"
+                font_style: "Subtitle1"
+                bold: True
+
+            RecycleView:
+                id:rv_shop
+                viewclass: "ShopNearCard"
+                size_hint_y: None
+                height: dp(140)
+                RecycleBoxLayout:
+                    orientation: "horizontal"
+                    default_size: None, dp(130)
+                    default_size_hint: None, None
+                    size_hint_y: None
+                    height: self.minimum_height
+                    spacing: dp(10)
+                    adaptive_width: True
+
+            # --- Meilleurs restaurants ---
+            MDLabel:
+                text: "Les 10 meilleurs restaurants"
+                font_style: "Subtitle1"
+                bold: True
+
+            RecycleView:
+                id:rv_restaurant
+                viewclass: "RestaurantCard"
+                size_hint_y: None
+                height: dp(140)
+                RecycleBoxLayout:
+                    orientation: "horizontal"
+                    default_size: None, dp(130)
+                    default_size_hint: None, None
+                    size_hint_y: None
+                    height: self.minimum_height
+                    spacing: dp(10)
+                    adaptive_width: True
+
+            # --- Produits pas chers ---
+            MDLabel:
+                text: "Produits pas chers"
+                font_style: "Subtitle1"
+                bold: True
+
+            RecycleView:
+                id:rv_product
+                viewclass: "ProductCard"
+                size_hint_y: None
+                height: dp(180)
+                RecycleBoxLayout:
+                    orientation: "horizontal"
+                    default_size: None, dp(160)
+                    default_size_hint: None, None
+                    size_hint_y: None
+                    height: self.minimum_height
+                    spacing: dp(10)
+                    adaptive_width: True
